@@ -1,5 +1,7 @@
 using System.Text;
 using api.Data;
+using api.Interfaces;
+using api.Models;
 using api.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -27,10 +29,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IUserBudgetRepository, UserBudgetRepository>();
+builder.Services.AddScoped<IFamillyRepository, FamillyRepository>();
 
-builder.Services.AddIdentityCore<IdentityUser>()
+builder.Services.AddIdentityCore<IdentityUser>() //ZamiastUserData -> IdentityData
     .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Tukano")
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Tukano") // UserData -> IdentityData
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 

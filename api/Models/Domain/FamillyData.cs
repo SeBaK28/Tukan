@@ -11,8 +11,10 @@ namespace api.Models
     {
         [Key]
         public int GroupId { get; set; }
-        public List<UserData> Members { get; set; }
+        public List<UserData> Members { get; set; } //Dla fronta czy lepiej będzie mieć całego usera czy przekazywać rodzienie jedynie id danego usera 
         [Column(TypeName = "decimal(18,2)")]
         public decimal GroupBudget { get; set; }
+        public string AdminGroupId { get; set; }
+        //public string NameGroup { get; set; }
     }
 }

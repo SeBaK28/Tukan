@@ -23,7 +23,8 @@ namespace api.Repositories
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, user.Email)
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             };
 
             claims.AddRange(roles.Select(roles => new Claim(ClaimTypes.Role, roles)));

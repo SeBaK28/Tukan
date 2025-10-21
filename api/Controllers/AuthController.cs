@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api.Data;
 using api.Models;
 using api.Models.DTO;
 using api.Repositories;
@@ -17,10 +18,12 @@ namespace api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;
         private readonly ITokenRepository _token;
 
-        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository token)
+        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository token, ApplicationDbContext context)
         {
+            _context = context;
             _userManager = userManager;
             _token = token;
         }
@@ -28,10 +31,16 @@ namespace api.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequestDto requestDto)
         {
-            var user = new IdentityUser
+            // var user = new IdentityUser
+            // {
+            //     UserName = requestDto.Email?.Trim(),
+            //     Email = requestDto.Email?.Trim()
+            // };
+
+            var user = new UserData
             {
                 UserName = requestDto.Email?.Trim(),
-                Email = requestDto.Email?.Trim()
+                Email = requestDto.Email?.Trim(),
             };
 
             //Create user
@@ -44,7 +53,9 @@ namespace api.Controllers
 
                 if (identityResult.Succeeded)
                 {
-                    return Ok("Account created");
+                    await _context.UserDatas.AddAsync(user);
+                    await _context.SaveChangesAsync();
+                    return Ok("Account created"); //there sould be returned token, email
                 }
                 else
                 {
@@ -52,7 +63,7 @@ namespace api.Controllers
                     {
                         foreach (var error in identityResult.Errors)
                         {
-                            ModelState.AddModelError("SthWrong", error.Description);
+                            ModelState.AddModelError("", error.Description);
                         }
                     }
                 }
@@ -63,7 +74,7 @@ namespace api.Controllers
                 {
                     foreach (var error in identityResult.Errors)
                     {
-                        ModelState.AddModelError("SthWrong", error.Description);
+                        ModelState.AddModelError("", error.Description);
                     }
                 }
             }

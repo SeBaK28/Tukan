@@ -149,3 +149,4 @@
 /Users/sebastiankonstanty/Kursy/TukanoPraktyki/Backend/api/obj/Debug/net8.0/api.pdb
 /Users/sebastiankonstanty/Kursy/TukanoPraktyki/Backend/api/obj/Debug/net8.0/api.genruntimeconfig.cache
 /Users/sebastiankonstanty/Kursy/TukanoPraktyki/Backend/api/obj/Debug/net8.0/ref/api.dll
+/Users/sebastiankonstanty/Kursy/TukanoPraktyki/Backend/api/obj/Debug/net8.0/api.sourcelink.json
