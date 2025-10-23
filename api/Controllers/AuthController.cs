@@ -17,11 +17,11 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<UserData> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ITokenRepository _token;
 
-        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository token, ApplicationDbContext context)
+        public AuthController(UserManager<UserData> userManager, ITokenRepository token, ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;

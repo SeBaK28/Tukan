@@ -32,9 +32,13 @@ builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 builder.Services.AddScoped<IUserBudgetRepository, UserBudgetRepository>();
 builder.Services.AddScoped<IFamillyRepository, FamillyRepository>();
 
-builder.Services.AddIdentityCore<IdentityUser>() //ZamiastUserData -> IdentityData
-    .AddRoles<IdentityRole>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Tukano") // UserData -> IdentityData
+// builder.Services.AddIdentityCore<IdentityUser>() //Zamiast UserData -> IdentityData
+//     .AddRoles<IdentityRole>()
+//     .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Tukano") // UserData -> IdentityData
+//     .AddEntityFrameworkStores<AuthDbContext>()
+//     .AddDefaultTokenProviders();
+
+builder.Services.AddIdentity<UserData, IdentityRole>()
     .AddEntityFrameworkStores<AuthDbContext>()
     .AddDefaultTokenProviders();
 

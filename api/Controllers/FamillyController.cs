@@ -17,11 +17,11 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class FamillyController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<UserData> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly IFamillyRepository _famillyRepo;
 
-        public FamillyController(UserManager<IdentityUser> userManager, ApplicationDbContext context, IFamillyRepository famillyRepo)
+        public FamillyController(UserManager<UserData> userManager, ApplicationDbContext context, IFamillyRepository famillyRepo)
         {
             _famillyRepo = famillyRepo;
             _userManager = userManager;
@@ -36,6 +36,11 @@ namespace api.Controllers
         {
             var getId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var getUser = await _context.UserDatas.FirstOrDefaultAsync(x => x.Id == getId);
+
+            if(getUser is null)
+            {
+                return NotFound();
+            }
 
             var familly = new FamillyData
             {
