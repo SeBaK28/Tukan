@@ -10,7 +10,7 @@ using api.Data;
 
 namespace api.Migrations
 {
-    [DbContext(typeof(AuthDbContext))]
+//    [DbContext(typeof(AuthDbContext))]
     partial class AuthDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

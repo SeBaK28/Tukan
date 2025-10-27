@@ -9,11 +9,11 @@ using api.Data;
 
 #nullable disable
 
-namespace api.Migrations
+namespace api.Migrations.ApplicationDb
 {
-    //[DbContext(typeof(AuthDbContext))]
-    [Migration("20251022182533_RemoveBugs")]
-    partial class RemoveBugs
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20251023173157_Remove AuthDbContext")]
+    partial class RemoveAuthDbContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -106,76 +106,6 @@ namespace api.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetRoleClaims", (string)null);
-                });
-
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.UserData", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("UserData");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f57d4bc1-1e94-4c0f-b16e-0f09e36a73b4",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "3270f37b-fc93-4ebb-9914-31470d41c94c",
-                            Email = "admin@tukano.com",
-                            EmailConfirmed = false,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ADMIN@TUKANO.COM",
-                            NormalizedUserName = "ADMIN@TUKANO.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOyly4IVBK6Ksin6gjGqcnzYLbTlHlNu+wFM3Q3lCrdclId1+0/38/ngrgbC7aJMfQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "b7661d19-ed7d-42d0-a237-76f10e1259f8",
-                            TwoFactorEnabled = false,
-                            UserName = "admin@tukano.com"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -288,7 +218,7 @@ namespace api.Migrations
 
                     b.HasKey("GroupId");
 
-                    b.ToTable("FamillyData");
+                    b.ToTable("FamillyDatas");
                 });
 
             modelBuilder.Entity("api.Models.TransactionData", b =>
@@ -324,7 +254,7 @@ namespace api.Migrations
 
                     b.HasIndex("UserDataId");
 
-                    b.ToTable("TransactionData");
+                    b.ToTable("TransactionDatas");
                 });
 
             modelBuilder.Entity("api.Models.UserData", b =>
@@ -402,6 +332,27 @@ namespace api.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "f57d4bc1-1e94-4c0f-b16e-0f09e36a73b4",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "14f47afa-c8ba-4156-a203-ed17983cda02",
+                            Email = "admin@tukano.com",
+                            EmailConfirmed = false,
+                            Expenses = 0m,
+                            LockoutEnabled = false,
+                            MonthlyBuget = 0m,
+                            NormalizedEmail = "ADMIN@TUKANO.COM",
+                            NormalizedUserName = "ADMIN@TUKANO.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAENXAcTNkGAf2BlSw/hxXXLFGXIHcnB7PAgXd7wK0gefNxAYNE7R9+DMhyZvZXpxvbA==",
+                            PhoneNumberConfirmed = false,
+                            Savings = 0m,
+                            SecurityStamp = "18456597-e4b4-42dd-a3ac-d0156fe3ecaa",
+                            TwoFactorEnabled = false,
+                            UserName = "admin@tukano.com"
+                        });
                 });
 
             modelBuilder.Entity("FamillyDataUserData", b =>

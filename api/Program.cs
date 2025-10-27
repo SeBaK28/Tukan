@@ -18,10 +18,6 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<AuthDbContext>(options =>
-{
-    options.UseSqlServer(builder.Configuration.GetConnectionString("TukanoConnectionString"));
-});
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -29,8 +25,6 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
-builder.Services.AddScoped<IUserBudgetRepository, UserBudgetRepository>();
-builder.Services.AddScoped<IFamillyRepository, FamillyRepository>();
 
 // builder.Services.AddIdentityCore<IdentityUser>() //Zamiast UserData -> IdentityData
 //     .AddRoles<IdentityRole>()
@@ -39,7 +33,7 @@ builder.Services.AddScoped<IFamillyRepository, FamillyRepository>();
 //     .AddDefaultTokenProviders();
 
 builder.Services.AddIdentity<UserData, IdentityRole>()
-    .AddEntityFrameworkStores<AuthDbContext>()
+    .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
 builder.Services.Configure<IdentityOptions>(options =>
