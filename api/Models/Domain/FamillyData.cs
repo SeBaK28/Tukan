@@ -15,6 +15,6 @@ namespace api.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal GroupBudget { get; set; }
         public string AdminGroupId { get; set; }
-        //public string NameGroup { get; set; }
+        public string NameGroup { get; set; } 
     }
 }

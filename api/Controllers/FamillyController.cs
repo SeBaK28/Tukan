@@ -4,8 +4,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using api.Data;
-using api.Interfaces;
 using api.Models;
+using api.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -13,43 +13,71 @@ using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class FamillyController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<UserData> _userManager;
         private readonly ApplicationDbContext _context;
-        private readonly IFamillyRepository _famillyRepo;
 
-        public FamillyController(UserManager<IdentityUser> userManager, ApplicationDbContext context, IFamillyRepository famillyRepo)
+        public FamillyController(UserManager<UserData> userManager, ApplicationDbContext context)
         {
-            _famillyRepo = famillyRepo;
-            _userManager = userManager;
             _context = context;
+            _userManager = userManager;
         }
 
-
         [HttpPost]
-        [Route("newFamilly")]
+        [Route("create-familly")]
         [Authorize]
-        public async Task<IActionResult> CreateNewFamilly()
+        public async Task<IActionResult> CreateFamilly([FromBody] NewFamillyRequestDto requestDto)
         {
             var getId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var getUser = await _context.UserDatas.FirstOrDefaultAsync(x => x.Id == getId);
+            var getUser = await _userManager.FindByIdAsync(getId);
 
             var familly = new FamillyData
             {
-                Members = new List<UserData>(),
+                NameGroup = requestDto.NameGroup,
                 GroupBudget = 0,
-                AdminGroupId = getId,
+                AdminGroupId = getUser.Id,
+                Members = new List<UserData>()
             };
 
-            await _famillyRepo.CreateAsync(familly);
             familly.Members.Add(getUser);
-            await _userManager.AddToRoleAsync(getUser, "FamillyCreator"); 
+            var addOperation = await _context.FamillyDatas.AddAsync(familly);
+            if (addOperation is not null)
+            {
+                await _userManager.AddToRoleAsync(getUser, "FamillyCreator");
+                await _context.SaveChangesAsync();
 
+                return Ok($"Familly {requestDto.NameGroup} is create");
+                // return CreatedAtAction(nameof(), new{id = })
+            }
 
-            return Ok("New familly is created");
+            return BadRequest();
+        }
+
+        [HttpPost]
+        [Route("add-member")]
+        [Authorize(Roles = "FamillyCreator")]
+        public async Task<IActionResult> AddUserToMemers([FromBody] AddUserToMemberDTO requestDto)
+        {
+            var creatorId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userToAdd = await _userManager.FindByEmailAsync(requestDto.Email);
+
+            var familly = await _context.FamillyDatas.FirstOrDefaultAsync(x => x.GroupId == requestDto.GroupId);
+
+            if(familly is null || userToAdd is null)
+            {
+                return NotFound();
+            }
+
+            if (familly.AdminGroupId == creatorId)
+            {
+                familly.Members.Add(userToAdd);
+                await _context.SaveChangesAsync();
+            }
+
+            return BadRequest();
         }
     }
 }

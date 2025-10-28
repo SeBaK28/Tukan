@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using api.Data;
+using api.Interfaces;
 using api.Models;
 using api.Models.DTO;
 using api.Repositories;
@@ -17,11 +18,11 @@ namespace api.Controllers
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<UserData> _userManager;
         private readonly ApplicationDbContext _context;
         private readonly ITokenRepository _token;
 
-        public AuthController(UserManager<IdentityUser> userManager, ITokenRepository token, ApplicationDbContext context)
+        public AuthController(UserManager<UserData> userManager, ITokenRepository token, ApplicationDbContext context)
         {
             _context = context;
             _userManager = userManager;
@@ -53,8 +54,6 @@ namespace api.Controllers
 
                 if (identityResult.Succeeded)
                 {
-                    await _context.UserDatas.AddAsync(user);
-                    await _context.SaveChangesAsync();
                     return Ok("Account created"); //there sould be returned token, email
                 }
                 else
@@ -63,7 +62,7 @@ namespace api.Controllers
                     {
                         foreach (var error in identityResult.Errors)
                         {
-                            ModelState.AddModelError("", error.Description);
+                            ModelState.AddModelError("STH wrong", error.Description);
                         }
                     }
                 }
@@ -74,7 +73,7 @@ namespace api.Controllers
                 {
                     foreach (var error in identityResult.Errors)
                     {
-                        ModelState.AddModelError("", error.Description);
+                        ModelState.AddModelError("STH wrong", error.Description);
                     }
                 }
             }

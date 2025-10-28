@@ -5,6 +5,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using api.Interfaces;
+using api.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -19,7 +21,7 @@ namespace api.Repositories
             _configuration = configuration;
         }
 
-        public string CreateJwtToken(IdentityUser user, List<string> roles)
+        public string CreateJwtToken(UserData user, List<string> roles)
         {
             var claims = new List<Claim>
             {

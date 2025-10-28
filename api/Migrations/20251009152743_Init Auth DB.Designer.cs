@@ -11,7 +11,7 @@ using api.Data;
 
 namespace api.Migrations
 {
-    [DbContext(typeof(AuthDbContext))]
+    //[DbContext(typeof(AuthDbContext))]
     [Migration("20251009152743_Init Auth DB")]
     partial class InitAuthDB
     {

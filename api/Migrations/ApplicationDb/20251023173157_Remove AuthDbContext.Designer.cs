@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using api.Data;
 
@@ -11,9 +12,11 @@ using api.Data;
 namespace api.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251023173157_Remove AuthDbContext")]
+    partial class RemoveAuthDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -213,10 +216,6 @@ namespace api.Migrations.ApplicationDb
                     b.Property<decimal>("GroupBudget")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("NameGroup")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("GroupId");
 
                     b.ToTable("FamillyDatas");
@@ -339,7 +338,7 @@ namespace api.Migrations.ApplicationDb
                         {
                             Id = "f57d4bc1-1e94-4c0f-b16e-0f09e36a73b4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "33e7ed4a-94d3-45c1-8a8d-9ef1eabf450d",
+                            ConcurrencyStamp = "14f47afa-c8ba-4156-a203-ed17983cda02",
                             Email = "admin@tukano.com",
                             EmailConfirmed = false,
                             Expenses = 0m,
@@ -347,10 +346,10 @@ namespace api.Migrations.ApplicationDb
                             MonthlyBuget = 0m,
                             NormalizedEmail = "ADMIN@TUKANO.COM",
                             NormalizedUserName = "ADMIN@TUKANO.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOsYemr8iDQH4AxHD2TWRSiqT9FlkR3b3onQP+6C58Qof9otuw2cypFaiHugLuKsBQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENXAcTNkGAf2BlSw/hxXXLFGXIHcnB7PAgXd7wK0gefNxAYNE7R9+DMhyZvZXpxvbA==",
                             PhoneNumberConfirmed = false,
                             Savings = 0m,
-                            SecurityStamp = "b50d283b-c26b-4ad0-aaec-26628723f5ab",
+                            SecurityStamp = "18456597-e4b4-42dd-a3ac-d0156fe3ecaa",
                             TwoFactorEnabled = false,
                             UserName = "admin@tukano.com"
                         });
