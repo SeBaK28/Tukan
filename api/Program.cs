@@ -25,6 +25,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<IFamillyDataRepository, FamillyDataRepository>();
+builder.Services.AddScoped<IUserDataRepository, UserDataRepository>();
 
 // builder.Services.AddIdentityCore<IdentityUser>() //Zamiast UserData -> IdentityData
 //     .AddRoles<IdentityRole>()

@@ -4,12 +4,15 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using api.Data;
+using api.Interfaces;
+using api.Mapper;
 using api.Models;
 using api.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace api.Controllers
 {
@@ -19,12 +22,16 @@ namespace api.Controllers
     {
         private readonly UserManager<UserData> _userManager;
         private readonly ApplicationDbContext _context;
+        private readonly IFamillyDataRepository _famillyRepo;
 
-        public FamillyController(UserManager<UserData> userManager, ApplicationDbContext context)
+        public FamillyController(UserManager<UserData> userManager, ApplicationDbContext context,
+        IFamillyDataRepository famillyRepo)
         {
+            _famillyRepo = famillyRepo;
             _context = context;
             _userManager = userManager;
         }
+
 
         [HttpPost]
         [Route("create-familly")]
@@ -34,50 +41,36 @@ namespace api.Controllers
             var getId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var getUser = await _userManager.FindByIdAsync(getId);
 
-            var familly = new FamillyData
-            {
-                NameGroup = requestDto.NameGroup,
-                GroupBudget = 0,
-                AdminGroupId = getUser.Id,
-                Members = new List<UserData>()
-            };
+            var newFamilly = await _famillyRepo.CreateFamillyAsync(getUser, requestDto);
 
-            familly.Members.Add(getUser);
-            var addOperation = await _context.FamillyDatas.AddAsync(familly);
-            if (addOperation is not null)
-            {
-                await _userManager.AddToRoleAsync(getUser, "FamillyCreator");
-                await _context.SaveChangesAsync();
+            if (newFamilly is null)
+                return NotFound();
 
-                return Ok($"Familly {requestDto.NameGroup} is create");
-                // return CreatedAtAction(nameof(), new{id = })
-            }
+            await _userManager.AddToRoleAsync(getUser, "FamillyCreator");
 
-            return BadRequest();
+            return Ok($"Familly {requestDto.NameGroup} is created");
+
         }
 
         [HttpPost]
         [Route("add-member")]
         [Authorize(Roles = "FamillyCreator")]
-        public async Task<IActionResult> AddUserToMemers([FromBody] AddUserToMemberDTO requestDto)
+        public async Task<IActionResult> AddUserToMembers([FromBody] AddUserToMemberDTO requestDto)
         {
             var creatorId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             var userToAdd = await _userManager.FindByEmailAsync(requestDto.Email);
 
-            var familly = await _context.FamillyDatas.FirstOrDefaultAsync(x => x.GroupId == requestDto.GroupId);
+            var newAction = await _famillyRepo.AddToFamillyAsync(userToAdd, requestDto, creatorId);
 
-            if(familly is null || userToAdd is null)
+            if (newAction is null || userToAdd is null)
             {
                 return NotFound();
             }
 
-            if (familly.AdminGroupId == creatorId)
-            {
-                familly.Members.Add(userToAdd);
-                await _context.SaveChangesAsync();
-            }
-
-            return BadRequest();
+            return Ok($"Succesfully added {requestDto.Email} to familly"); //dodać sprawdzenie czy podany
+            //  user jest juz w tej rodzinie. Jak zostanie dodany user to musi być podzielony 
+            // budzet na wysztkich members. Dodać pobieranie wszystkich z rodziny.
         }
     }
 }
