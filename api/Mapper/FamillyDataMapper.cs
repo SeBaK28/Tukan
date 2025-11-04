@@ -9,7 +9,7 @@ namespace api.Mapper
 {
     public static class FamillyDataMapper
     {
-        
+
         public static FamillyData NewFamillyDto(this NewFamillyRequestDto requestDto, string AdminId)
         {
             return new FamillyData
@@ -18,6 +18,14 @@ namespace api.Mapper
                 GroupBudget = requestDto.GroupBudget,
                 NameGroup = requestDto.NameGroup,
                 AdminGroupId = AdminId
+            };
+        }
+
+        public static FamillyListForUserResponseDto GetFamillyAndUsersDto(this FamillyData requestDto)
+        {
+            return new FamillyListForUserResponseDto
+            {
+                FamillyId = requestDto.GroupId,
             };
         }
 

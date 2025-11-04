@@ -11,6 +11,9 @@ namespace api.Interfaces
     {
         Task<FamillyData?> CreateFamillyAsync(UserData user, NewFamillyRequestDto requestDto);
         Task<FamillyData?> AddToFamillyAsync(UserData user, AddUserToMemberDTO requestDto, string creatorId);
-        //Task<FamillyData> RefreshFamillyAsync();
+        Task<FamillyData> RefreshFamillyDataAsync(int groupId);
+        Task<bool> IsAlreadyInFamillyAsync(int groupId, UserData? user);
+        Task<FamillyData?> FindFamillyAsync(int groupId);
+
     }
 }

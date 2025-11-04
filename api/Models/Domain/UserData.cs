@@ -19,4 +19,4 @@ namespace api.Models
         [Column(TypeName = "decimal(18,2)")]
         public decimal Savings { get; set; } = 0;
     }
-}
+}   
